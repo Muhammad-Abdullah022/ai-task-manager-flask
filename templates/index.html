@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Task Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">AI Task Manager</h2>
+
+    <div class="card p-3 shadow-sm mb-4">
+        <form action="/add" method="POST">
+            <div class="row g-2">
+                <div class="col-md-5">
+                    <input type="text" name="title" class="form-control" placeholder="Enter task title" required>
+                </div>
+
+                <div class="col-md-3">
+                    <select name="priority" class="form-control" required>
+                        <option value="">Select Priority</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <input type="date" name="deadline" class="form-control">
+                </div>
+
+                <div class="col-md-1">
+                    <button class="btn btn-success w-100">+</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="mb-3">
+        <a href="/" class="btn btn-secondary btn-sm">All</a>
+        <a href="/?priority=Low" class="btn btn-info btn-sm">Low</a>
+        <a href="/?priority=Medium" class="btn btn-warning btn-sm">Medium</a>
+        <a href="/?priority=High" class="btn btn-danger btn-sm">High</a>
+    </div>
+
+    <div class="card shadow-sm p-3">
+        <h5>Task List</h5>
+
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Priority</th>
+                    <th>Deadline</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for task in tasks %}
+                <tr>
+                    <td>{{ task["title"] }}</td>
+                    <td>{{ task["priority"] }}</td>
+                    <td>{{ task["deadline"] if task["deadline"] else "None" }}</td>
+
+                    <td>
+                        {% if task["completed"] == 1 %}
+                        <span class="badge bg-success">Completed</span>
+                        {% else %}
+                        <span class="badge bg-warning">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if task["completed"] == 0 %}
+                        <a href="/complete/{{ task['id'] }}" class="btn btn-sm btn-primary">Complete</a>
+                        {% endif %}
+                        <a href="/delete/{{ task['id'] }}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>
